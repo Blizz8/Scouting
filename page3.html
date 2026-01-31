@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scouting Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Scouting Form</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="page2.html">List</a>
+        <a href="page3.html">Form</a>
+      </nav>
+    </header>
+
+    <main>
+      <p>Required fields: <strong>Team Number</strong>, <strong>Team Name</strong>, <strong>Leader</strong>, <strong>Auto Strat</strong>. Use <strong>Add Question</strong> to add custom questions. Submitting a form with a Team Number will create or update the data sheet (List page) for that team.</p>
+
+      <div class="form-controls-top">
+        <button id="add-question">Add Question</button>
+        <button id="reset-defaults">Reset Defaults</button>
+        <button id="set-password">Set/Change Password</button>
+        <button id="clear-password" type="button">Clear Password</button>
+      </div>
+
+      <form id="scout-form">
+        <div id="questions"></div>
+
+        <div class="form-controls">
+          <button type="submit">Submit</button>
+          <button type="button" id="clear-all">Clear All</button>
+        </div>
+      </form>
+
+      <section id="submissions">
+        <h3>Saved Submissions</h3>
+        <ul id="subs-list"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <small>Submissions saved locally (localStorage).</small>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

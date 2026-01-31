@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scouting List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Scouting List</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="page2.html">List</a>
+        <a href="page3.html">Form</a>
+      </nav>
+    </header>
+
+    <main>
+      <p>Click a number to open its info box. Edit and save the info — it's stored locally.</p>
+
+      <div class="list-controls">
+        <button id="add-entry">Add Entry</button>
+        <button id="set-password">Set/Change Password</button>
+        <button id="clear-password" type="button">Clear Password</button>
+      </div>
+
+      <ol class="number-list" id="number-list">
+        <!-- entries rendered by JavaScript -->
+      </ol>
+
+      <section id="preview">
+        <h3>Saved Data</h3>
+        <ul id="saved-list"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <small>Stored in your browser (localStorage).</small>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "robbe-scouting",
+  "version": "1.0.0",
+  "description": "Simple static site for robotics scouting",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
