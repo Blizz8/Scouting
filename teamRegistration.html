@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Registration</title>
+    <script src="storageSync.js"></script>
+    <script src="teamRegistration.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('registrationForm');
+      const teamNumberEl = document.getElementById('teamNumber');
+      const teamNameEl = document.getElementById('teamName');
+      const errorEl = document.getElementById('registrationError');
+
+      function showError(msg) {
+        errorEl.textContent = msg || '';
+        errorEl.style.display = msg ? 'block' : 'none';
+      }
+
+      async function handleSubmit(e) {
+        e.preventDefault();
+        showError('');
+        const teamNumberInput = teamNumberEl.value;
+        const teamNameInput = teamNameEl.value;
+        try {
+          const result = await window.teamRegistration.validateTeamNumberAndName(teamNumberInput, teamNameInput);
+          if (!result.ok) {
+            if (result.reason === 'team-number-not-registered') {
+              showError('Team number is not registered.');
+              teamNumberEl.focus();
+              return;
+            }
+            if (result.reason === 'team-name-mismatch') {
+              showError('Team name does not match the registered nickname. Expected: ' + result.expected);
+              teamNameEl.focus();
+              return;
+            }
+          }
+          // validation passed — submit the form
+          form.submit();
+        } catch (err) {
+          showError('Validation failed: ' + err.message + ' — you can upload a local teams.json below or serve the site over HTTP.');
+        }
+      }
+
+      const teamsFileEl = document.getElementById('teamsFile');
+      const teamsFileMsg = document.getElementById('teamsFileMsg');
+      teamsFileEl.addEventListener('change', e=>{
+        const f = e.target.files && e.target.files[0];
+        if(!f){ teamsFileMsg.style.display='none'; teamsFileMsg.textContent=''; return; }
+        const reader = new FileReader();
+        reader.onload = ()=>{
+          try{
+            const json = JSON.parse(reader.result);
+            if(!Array.isArray(json)) throw new Error('teams.json must be an array');
+            window.__TEAMS__ = json;
+            teamsFileMsg.style.display='block';
+            teamsFileMsg.textContent='teams.json loaded from file. You can now submit the form.';
+            teamsFileMsg.style.color = '#6f6';
+          }catch(err){ teamsFileMsg.style.display='block'; teamsFileMsg.textContent='Failed to parse teams.json: '+err.message; teamsFileMsg.style.color='#f66'; }
+        };
+        reader.readAsText(f);
+      });
+
+      // Initialize global storage sync (pull into localStorage, subscribe to updates)
+      if (window.storageSync && typeof window.storageSync.init === 'function') {
+        window.storageSync.init({ autoPull: true }).then(()=>{
+          // report any last submission from another user
+          try{
+            const last = JSON.parse(localStorage.getItem('lastSubmission') || 'null');
+            if (last) {
+              console.log('Last submission sync:', last);
+            }
+          }catch(e){}
+
+          window.storageSync.onUpdateCallback = function(payload){
+            if (payload && payload.key === 'lastSubmission') {
+              try { const v = payload.value; showError('New submission from another user: ' + (v.nickname || v.team_number)); } catch(e){}
+            }
+          };
+        }).catch(e=>console.warn('storageSync init failed', e));
+      }
+
+      if (form) form.addEventListener('submit', handleSubmit);
+    });
+    </script>
+</head>
+<body>
+    <form id="registrationForm">
+        <label for="teamNumber">Team Number:</label>
+        <input type="text" id="teamNumber" name="teamNumber" required>
+        <br>
+        <label for="teamName">Team Name:</label>
+        <input type="text" id="teamName" name="teamName" required>
+        <br>
+        <div id="registrationError" role="alert" aria-live="assertive" style="display:none;color:#c00;margin:8px 0;"></div>
+
+        <label for="teamsFile" style="font-size:.9rem;margin-top:.5rem;display:block;color:#f33">Upload teams.json (optional)</label>
+        <input type="file" id="teamsFile" accept="application/json" style="display:block;margin-bottom:0.5rem;">
+        <div id="teamsFileMsg" style="font-size:.8rem;color:#f66;display:none;margin-bottom:.5rem"></div>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

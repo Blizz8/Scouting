@@ -1,0 +1,70 @@
+<!----<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      .calendar { max-width:760px;margin:0 auto }
+      .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+      .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+      .cal-cell{background:#0b0b0b;border:1px solid #222;padding:.5rem;min-height:80px;border-radius:4px}
+      .cal-cell .date{font-weight:600;margin-bottom:.25rem}
+      .weekday{font-weight:700;text-align:center;padding:.25rem 0}
+      .event{background:#181818;border:1px solid #333;padding:.15rem .25rem;border-radius:3px;margin-top:.25rem;cursor:pointer}
+      .controls button{margin-left:.5rem}
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Calendar</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="page2.html">List</a>
+        <a href="page3.html">Form</a>
+        <a href="calendar.html">Calendar</a>
+      </nav>
+    </header>
+
+    <main class="calendar">
+      <div class="cal-head">
+        <div>
+          <button id="prev-month">◀</button>
+          <button id="next-month">▶</button>
+          <span id="month-label" style="margin-left:.5rem;font-weight:700"></span>
+        </div>
+        <div class="controls">
+          <button id="today">Today</button>
+          <button id="export">Export</button>
+          <button id="import">Import</button>
+        </div>
+      </div>
+
+      <div class="cal-grid" id="weekday-headers">
+        <div class="weekday">Sun</div>
+        <div class="weekday">Mon</div>
+        <div class="weekday">Tue</div>
+        <div class="weekday">Wed</div>
+        <div class="weekday">Thu</div>
+        <div class="weekday">Fri</div>
+        <div class="weekday">Sat</div>
+      </div>
+
+      <div class="cal-grid" id="calendar-grid"></div>
+
+      <section style="margin-top:1rem">
+        <small>Click a day to add an event. Click an event to edit or delete it. Adding/editing/deleting requires the set password (you can set/change it from other pages).</small>
+      </section>
+    </main>
+
+    <footer>
+      <small>Events stored locally in your browser (localStorage).</small>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="calendar.js"></script>
+  </body>
+</html><!-->
+
+<1o
