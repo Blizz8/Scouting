@@ -27,6 +27,9 @@
         <button id="reset-defaults">Reset Defaults</button>
         <button id="set-password">Set/Change Password</button>
         <button id="clear-password" type="button">Clear Password</button>
+        <label for="teamsFile" style="margin-left:8px;color:#ff3333;font-size:.9rem">Upload teams.json</label>
+        <input type="file" id="teamsFile" accept="application/json" style="margin-left:4px">
+        <span id="teamsFileMsg" style="margin-left:8px;color:#ff3333;font-size:.9rem;display:none"></span>
       </div>
 
       <form id="scout-form">
@@ -48,6 +51,403 @@
       <small>Submissions saved locally (localStorage).</small>
     </footer>
 
+    <script>
+      // Embedded teams to avoid needing to fetch teams.json on page load.
+      // This sets window.__TEAMS__ used by teamRegistration.js when present.
+      window.__TEAMS__ = [
+  {
+    "city": "Abington",
+    "country": "USA",
+    "key": "frc10070",
+    "name": "Abington Senior High School",
+    "nickname": "Ghost Bots",
+    "rookie_year": 2025,
+    "school_name": "Abington Senior High School",
+    "state_prov": "Pennsylvania",
+    "team_number": 10070
+  },
+  {
+    "city": "Philadelphia",
+    "country": "USA",
+    "key": "frc10143",
+    "name": "Northeast HS",
+    "nickname": "Northeast High Viking Robotics",
+    "rookie_year": 2025,
+    "school_name": "Northeast HS",
+    "state_prov": "Pennsylvania",
+    "team_number": 10143
+  },
+  {
+    "city": "Philadelphia",
+    "country": "USA",
+    "key": "frc10157",
+    "name": "Roman Catholic High School",
+    "nickname": "Roman Robotics",
+    "rookie_year": 2025,
+    "school_name": "Roman Catholic High School",
+    "state_prov": "Pennsylvania",
+    "team_number": 10157
+  },
+  {
+    "city": "Lawrence Township",
+    "country": "USA",
+    "key": "frc10170",
+    "name": "Notre Dame High School",
+    "nickname": "ND Robotics",
+    "rookie_year": 2025,
+    "school_name": "Notre Dame High School",
+    "state_prov": "New Jersey",
+    "team_number": 10170
+  },
+  {
+    "city": "Somerville",
+    "country": "USA",
+    "key": "frc102",
+    "name": "Johnson & Johnson/Picatinny Arsenal/Department of Defense/Comcast NBCUniversal/Elmer's Catering/Community Options, Inc./Furino & Sons, Inc./Crisdel/Dr. Victor J. Bauer/Qualcomm/Air Liquide/PDQ Auto Supply/BPOE/Eii Electrical Contractors&Somerville High School",
+    "nickname": "The Gearheads",
+    "postal_code": "08876",
+    "rookie_year": 1998,
+    "school_name": "Somerville High School",
+    "state_prov": "New Jersey",
+    "team_number": 102,
+    "website": "http://www.team102.org"
+  },
+  {
+    "city": "Plainfield",
+    "country": "USA",
+    "key": "frc10232",
+    "name": "Schneider Electric&Plainfield High School",
+    "nickname": "Killer Kardinals 2",
+    "rookie_year": 2025,
+    "school_name": "Plainfield High School",
+    "state_prov": "New Jersey",
+    "team_number": 10232
+  },
+  {
+    "city": "Kintnersville",
+    "country": "USA",
+    "key": "frc103",
+    "name": "MAR VAN Industries/In Memory of Rich Nast/In memory of Jamie Wright/REV Robotics/Kintner LLC/Cima&Palisades High School",
+    "nickname": "Cybersonics",
+    "postal_code": "18930",
+    "rookie_year": 1997,
+    "school_name": "Palisades High School",
+    "state_prov": "Pennsylvania",
+    "team_number": 103,
+    "website": "http://www.cybersonics.net"
+  },
+  {
+    "city": "Bergenfield",
+    "country": "USA",
+    "key": "frc10366",
+    "name": "Bergenfield Board of Education&Bergenfield High School",
+    "nickname": "Builder Bears",
+    "rookie_year": 2025,
+    "school_name": "Bergenfield High School",
+    "state_prov": "New Jersey",
+    "team_number": 10366
+  },
+  {
+    "city": "Burlington",
+    "country": "USA",
+    "key": "frc10400",
+    "name": "Doane Academy/Boeing/Utaski &Doane Academy",
+    "nickname": "DART Doane Academy Robotics Team",
+    "rookie_year": 2025,
+    "school_name": "Doane Academy",
+    "state_prov": "New Jersey",
+    "team_number": 10400
+  },
+  {
+    "city": "Perkasie",
+    "country": "USA",
+    "key": "frc10584",
+    "name": "Comcast NBCUniversal/Boeing/Argosy Foundation/Robonauts Everybot/Ashby Law Offices/Polymaker&Pennridge HS",
+    "nickname": "Ridge Robotics",
+    "rookie_year": 2025,
+    "school_name": "Pennridge HS",
+    "state_prov": "Pennsylvania",
+    "team_number": 10584
+  },
+  {
+    "city": "Edison",
+    "country": "USA",
+    "key": "frc10600",
+    "name": "&Family/Community",
+    "nickname": "Two Steps Ahead",
+    "rookie_year": 2025,
+    "school_name": "Family/Community",
+    "state_prov": "New Jersey",
+    "team_number": 10600
+  },
+  {
+    "city": "Hightstown",
+    "country": "USA",
+    "key": "frc1089",
+    "name": "Bristol Myers-Squibb/DoD STEM/East Windsor Regional School District/Team Mercury Parent-Mentor Assosciation/Lockheed Martin/TRUMPF Photonics/Oracle & Hightstown High School",
+    "nickname": "Team Mercury",
+    "postal_code": "08520",
+    "rookie_year": 2003,
+    "school_name": "Hightstown High School",
+    "state_prov": "New Jersey",
+    "team_number": 1089,
+    "website": "http://www.mercury1089.com"
+  },
+  {
+    "city": "Philadelphia",
+    "country": "USA",
+    "key": "frc10918",
+    "name": "Masterman Julia R Sec Sch",
+    "nickname": "Bluesteel Dragons",
+    "rookie_year": 2026,
+    "school_name": "Masterman Julia R Sec Sch",
+    "state_prov": "Pennsylvania",
+    "team_number": 10918
+  },
+  {
+    "city": "Philadelphia",
+    "country": "USA",
+    "key": "frc10949",
+    "name": "NASA&Carver HS",
+    "nickname": "Metalheads",
+    "rookie_year": 2026,
+    "school_name": "Carver HS",
+    "state_prov": "Pennsylvania",
+    "team_number": 10949
+  },
+  {
+    "city": "Philadelphia",
+    "country": "USA",
+    "key": "frc10979",
+    "name": "TGR Learning Lab/DoD STEM&TGR Foundation",
+    "nickname": "Tiger Robotics",
+    "rookie_year": 2026,
+    "school_name": "TGR Foundation",
+    "state_prov": "Pennsylvania",
+    "team_number": 10979
+  },
+  {
+    "city": "Berwyn",
+    "country": "USA",
+    "key": "frc10989",
+    "name": "Eadeh Enterprises/Isolite Corporation/Comcast/DoD STEM&Boy Scouts of America&Conestoga Shs&Family/Community",
+    "nickname": "Blast Robotics",
+    "rookie_year": 2026,
+    "school_name": "Boy Scouts of America & Conestoga Shs & Family/Community",
+    "state_prov": "Pennsylvania",
+    "team_number": 10989
+  },
+  {
+    "city": "Enola",
+    "country": "USA",
+    "key": "frc10993",
+    "name": "TE Connectivity/NASA/The Gene Haas Foundation/BAE Systems/The Argosy Foundation/Advanced Conversion Technology/The Robonauts/PB-Truss, Inc.&Family/Community",
+    "nickname": "EP Robotics",
+    "rookie_year": 2026,
+    "school_name": "Family/Community",
+    "state_prov": "Pennsylvania",
+    "team_number": 10993
+  },
+  {
+    "city": "Rockaway",
+    "country": "USA",
+    "key": "frc10995",
+    "name": "American Christian School North Campus",
+    "nickname": "ACS Eagle Robotics",
+    "rookie_year": 2026,
+    "school_name": "American Christian School North Campus",
+    "state_prov": "New Jersey",
+    "team_number": 10995
+  },
+  {
+    "city": "Jersey City",
+    "country": "USA",
+    "key": "frc10997",
+    "name": "Family/Community",
+    "nickname": "St. George",
+    "rookie_year": 2026,
+    "school_name": "Family/Community",
+    "state_prov": "New Jersey",
+    "team_number": 10997
+  },
+  {
+    "city": "Flanders",
+    "country": "USA",
+    "key": "frc11",
+    "name": "National Defense Education Program/Westec Plastics Corporation/Fluent Inc./Nokia/Chameleon Designs/MegaPhase/Mt. Olive School District/Pereira Wealth Management, LLC/L3 Harris Foundation&Mt Olive High School",
+    "nickname": "MORT",
+    "postal_code": "07836",
+    "rookie_year": 1997,
+    "school_name": "Mt Olive High School",
+    "state_prov": "New Jersey",
+    "team_number": 11,
+    "website": "http://www.mort11.org"
+  },
+  {
+    "city": "East Brunswick",
+    "country": "USA",
+    "key": "frc11104",
+    "name": "Family/Community",
+    "nickname": "Phoenix Phanatics",
+    "rookie_year": 2026,
+    "school_name": "Family/Community",
+    "state_prov": "New Jersey",
+    "team_number": 11104
+  },
+  {
+    "city": "Camden",
+    "country": "USA",
+    "key": "frc11225",
+    "name": "Camden Prep Inc.",
+    "nickname": "Wolfimus",
+    "rookie_year": 2026,
+    "school_name": "Camden Prep Inc.",
+    "state_prov": "New Jersey",
+    "team_number": 11225
+  },
+  {
+    "city": "West Grove",
+    "country": "USA",
+    "key": "frc11366",
+    "name": "Avon Grove HS",
+    "nickname": "Red Devil's Redemption",
+    "rookie_year": 2026,
+    "school_name": "Avon Grove HS",
+    "state_prov": "Pennsylvania",
+    "team_number": 11366
+  },
+  {
+    "city": "Malvern",
+    "country": "USA",
+    "key": "frc1168",
+    "name": "CTDI/All Fill Inc.&Malvern Preparatory School",
+    "nickname": "Malvern Robotics",
+    "postal_code": "19355",
+    "rookie_year": 2003,
+    "school_name": "Malvern Preparatory School",
+    "state_prov": "Pennsylvania",
+    "team_number": 1168,
+    "website": "http://team1168robotics.blogspot.com/"
+  },
+  {
+    "city": "Philadelphia",
+    "country": "USA",
+    "key": "frc1218",
+    "name": "Metal Edge International/Comcast NBCUniversal/Naval Surface Warfare Center Philadelphia Division/Gene Haas Foundation/American Institute of Aeronautics and Astronautics/Laird Plastics/ErvTech International/R&M International&Springside Chestnut Hill Acad",
+    "nickname": "SCH Robotics",
+    "postal_code": "19118",
+    "rookie_year": 2003,
+    "school_name": "Springside Chestnut Hill Acad",
+    "state_prov": "Pennsylvania",
+    "team_number": 1218,
+    "website": "http://www.Team1218.org"
+  },
+  {
+    "city": "Scotch Plains",
+    "country": "USA",
+    "key": "frc1257",
+    "name": "Picatinny Arsenal/DoD STEM/NOKIA Bell Labs&Union Co Voc Tech School",
+    "nickname": "Parallel Universe",
+    "postal_code": "07076",
+    "rookie_year": 2004,
+    "school_name": "Union Co Voc Tech School",
+    "state_prov": "New Jersey",
+    "team_number": 1257,
+    "website": "http://www.team1257.org"
+  },
+  {
+    "city": "Somerville",
+    "country": "USA",
+    "key": "frc1279",
+    "name": "Johnson & Johnson/Picatinny Arsenal/Gene Haas Foundation/Nokia Bell Labs/Onlinemetals.com/FIRST&Immaculata High School",
+    "nickname": "Cold Fusion",
+    "postal_code": "08876",
+    "rookie_year": 2004,
+    "school_name": "Immaculata High School",
+    "state_prov": "New Jersey",
+    "team_number": 1279,
+    "website": "https://www.immaculatahighschool.org/about_us/student_clubs_organizations/robotics"
+  },
+  {
+    "city": "West Chester",
+    "country": "USA",
+    "key": "frc1391",
+    "name": "Comcast/TE Connectivity/Gene Haas Foundation/Adaptive Textiles/Friends of Metal Moose Individual Donor Fund/PTZOptics&Westtown School",
+    "nickname": "The Metal Moose",
+    "postal_code": "19382",
+    "rookie_year": 2004,
+    "school_name": "Westtown School",
+    "state_prov": "Pennsylvania",
+    "team_number": 1391,
+    "website": "https://www.metalmoose.org"
+  },
+  {
+    "city": "Skillman",
+    "country": "USA",
+    "key": "frc1403",
+    "name": "Montgomery Township School District/Bristol-Myers Squibb/National Defense Education Program&Montgomery High School",
+    "nickname": "Team 1403 Cougar Robotics",
+    "postal_code": "08558",
+    "rookie_year": 2004,
+    "school_name": "Montgomery High School",
+    "state_prov": "New Jersey",
+    "team_number": 1403,
+    "website": "http://www.cougarrobotics.com/"
+  },
+  {
+    "city": "Metuchen",
+    "country": "USA",
+    "key": "frc1626",
+    "name": "Saint Joseph High School/The Grotto Foundation/Mr. John Shibles&St Joseph's High School",
+    "nickname": "Falcon Robotics",
+    "postal_code": "08840",
+    "rookie_year": 2005,
+    "school_name": "St Joseph's High School",
+    "state_prov": "New Jersey",
+    "team_number": 1626,
+    "website": "http://stjoes.org"
+  },
+  {
+    "city": "Downingtown",
+    "country": "USA",
+    "key": "frc1640",
+    "name": "Comcast/Qualcomm/Boeing/Haas/Asha Jothie&Family/Community",
+    "nickname": "Sab-BOT-age",
+    "postal_code": "19335",
+    "rookie_year": 2005,
+    "school_name": "Family/Community",
+    "state_prov": "Pennsylvania",
+    "team_number": 1640,
+    "website": "http://wiki.team1640.com"
+  },
+  {
+    "city": "Tabernacle",
+    "country": "USA",
+    "key": "frc1647",
+    "name": "Lenape Regional High School District/Lockheed Martin/MTG Services, Inc./Landreth Logistics/Durable Undercarriage Inc./CJ Clancy and Associates/Murphy's Markets/Binkley's 5 and 10&Seneca High School&Shawnee High School",
+    "nickname": "Iron Devils",
+    "postal_code": "08088",
+    "rookie_year": 2005,
+    "school_name": "Seneca High School & Shawnee High School",
+    "state_prov": "New Jersey",
+    "team_number": 1647,
+    "website": "http://team1647.com/"
+  },
+  {
+    "city": "Mahwah",
+    "country": "USA",
+    "key": "frc1672",
+    "name": "Mahwah Board of Education & Mahwah High School/Orange and Rockland Electric/Gene Haas Foundation/Shock Tech, Inc./Inserra Supermarkets, Inc./Optimum/Bergen Fence/Hytorc&Mahwah High School",
+    "nickname": "Robo T-Birds",
+    "postal_code": "07430",
+    "rookie_year": 2005,
+    "school_name": "Mahwah High School",
+    "state_prov": "New Jersey",
+    "team_number": 1672,
+    "website": "http://www.team1672.org/"
+  },
+  {
+    "city": "Montvale",
+    </script>
     <script src="app.js"></script>
-  </body>
 </html>

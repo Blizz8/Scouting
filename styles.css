@@ -1,25 +1,26 @@
 *{box-sizing:border-box;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial, sans-serif}
-body{margin:0;padding:1rem;background:#f7f7fb;color:#111}
+:root{--bg:#000;--text:#ff3333;--muted:#661111;--border:#222}
+body{margin:0;padding:1rem;background:var(--bg);color:var(--text)}
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-nav a{margin-left:.75rem;text-decoration:none;color:#0366d6}
-#picture-area{height:320px;border:2px dashed #ccc;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999}
+nav a{margin-left:.75rem;text-decoration:none;color:var(--text)}
+#picture-area{height:320px;border:2px dashed var(--border);background:#0b0b0b;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text)}
 .number-list{list-style:decimal inside;padding:0;max-width:520px}
 .number-list li{margin:1rem 0}
-.num-btn{font-size:1.1rem;padding:.5rem 1rem}
+.num-btn{font-size:1.1rem;padding:.5rem 1rem;border:1px solid var(--text);background:transparent;color:var(--text)}
 .info{margin-top:.5rem}
-textarea{width:100%;padding:.5rem}
+textarea{width:100%;padding:.5rem;background:#111;border:1px solid var(--border);color:var(--text)}
 .save{margin-top:.5rem}
 #preview{margin-top:1rem}
 form .q{margin-bottom:.75rem}
-input{width:100%;padding:.5rem}
+input{width:100%;padding:.5rem;background:#111;border:1px solid var(--border);color:var(--text)}
 .form-controls{display:flex;gap:.5rem}
 .list-controls,.form-controls-top{display:flex;gap:.5rem;margin:0 0 1rem 0}
-.small-btn{font-size:.9rem;padding:.25rem .5rem}
+.small-btn{font-size:.9rem;padding:.25rem .5rem;border:1px solid var(--text);background:transparent;color:var(--text)}
 .item-controls{margin-left:.5rem}
 .btn-inline{margin-left:.5rem}
-.delete{color:#b71c1c;background:transparent;border:none}
-.del{color:#b71c1c;background:transparent;border:none}
-.edit{color:#0366d6;background:transparent;border:none}
-footer{margin-top:1.5rem;color:#666}
-button{cursor:pointer}
+.delete{color:var(--text);background:transparent;border:none}
+.del{color:var(--text);background:transparent;border:none}
+.edit{color:var(--text);background:transparent;border:none}
+footer{margin-top:1.5rem;color:var(--text)}
+button{cursor:pointer;background:transparent;color:var(--text);border:1px solid var(--text);padding:.25rem .5rem;border-radius:2px}
 small{font-size:.8rem}

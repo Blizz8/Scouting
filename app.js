@@ -171,6 +171,28 @@ function initFormPage(){
   setPwdBtn.addEventListener('click', setPasswordFlow);
   clearPwdBtn.addEventListener('click', clearPasswordFlow);
   addQ.addEventListener('click', ()=>{ addQuestionPrompt(); });
+
+  // teams.json upload support (useful when serving as file:// or when fetch fails)
+  const teamsFileEl = document.getElementById('teamsFile');
+  const teamsFileMsg = document.getElementById('teamsFileMsg');
+  if(teamsFileEl){
+    teamsFileEl.addEventListener('change', e=>{
+      const f = e.target.files && e.target.files[0];
+      if(!f){ teamsFileMsg.style.display='none'; teamsFileMsg.textContent=''; return; }
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try{
+          const json = JSON.parse(reader.result);
+          if(!Array.isArray(json)) throw new Error('teams.json must be an array');
+          window.__TEAMS__ = json;
+          teamsFileMsg.style.display='inline';
+          teamsFileMsg.textContent='teams.json loaded from file.';
+          teamsFileMsg.style.color = '#6f6';
+        }catch(err){ teamsFileMsg.style.display='inline'; teamsFileMsg.textContent='Failed to parse teams.json: '+err.message; teamsFileMsg.style.color='#f66'; }
+      };
+      reader.readAsText(f);
+    });
+  }
   resetDefaults.addEventListener('click', ()=>{ saveQuestions(defaultQuestions.slice()); renderQuestions(); alert('Defaults restored'); });
 
   let editingIndex = null;
@@ -237,7 +259,7 @@ function initFormPage(){
     }));
   }
 
-  form.addEventListener('submit', e=>{
+  form.addEventListener('submit', async e=>{
     e.preventDefault();
     // Ensure questions' labels are persisted
     const labelInputs = $$('#questions .q-label');
@@ -250,6 +272,26 @@ function initFormPage(){
     // require team number
     const teamNum = data['teamNumber'] || data['c-teamNumber'] || '';
     if(!teamNum){ alert('Team Number is required'); return; }
+
+    // validate team number and team name (if available)
+    if(window.teamRegistration && typeof window.teamRegistration.validateTeamNumberAndName === 'function'){
+      try {
+        const result = await window.teamRegistration.validateTeamNumberAndName(teamNum, data['teamName'] || '');
+        if(!result.ok){
+          if(result.reason === 'team-number-not-registered'){
+            alert('Team number is not registered.');
+            return;
+          }
+          if(result.reason === 'team-name-mismatch'){
+            alert('Team name does not match the registered nickname. Expected: ' + result.expected);
+            return;
+          }
+        }
+      } catch(err){
+        alert('Validation failed: ' + err.message);
+        return;
+      }
+    }
 
     // build summary text and meta
     const questions = loadQuestions();
