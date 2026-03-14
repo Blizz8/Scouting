@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Post-Match Scouting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Post-Match Scouting</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="page2.html">List</a>
+        <a href="page3.html">Pit Scouting</a>
+        <a href="page4.html">Events</a>
+        <a href="page5.html">Post-Match</a>
+      </nav>
+    </header>
+
+    <main>
+      <p>Editable form for post-match scouting. Add columns as needed.</p>
+
+      <div class="form-controls-top">
+        <button type="button" id="add-column">Add Column</button>
+        <button type="button" id="add-row">Add Row</button>
+        <button type="button" id="set-password">Set/Change Password</button>
+        <button type="button" id="clear-password">Clear Password</button>
+      </div>
+
+      <form id="post-match-form">
+        <table id="scouting-table">
+          <thead id="table-head">
+            <tr>
+              <th>Match#</th>
+              
+              <th>Hung</th>
+              <th>Shot Balls</th>
+              <th>Collected balls from The Middle</th>
+              
+              <th># times shot</th>
+              <th>D S C</th>
+              <th>Full when shooting?</th>
+              <th>Accuracy</th>
+              <th>Rate Driving</th>
+              
+              <th>Defense</th>
+              <th>Shuttle</th>
+              <th>Collect Balls</th>
+              
+              <th>endgame level</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr>
+              <td><input name="match-0" placeholder="Match#"></td>
+              <td><input name="hung-0" placeholder="Hung"></td>
+              <td><input name="shotballs-0" placeholder="Shot Balls"></td>
+              <td><input name="collected-0" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-0" placeholder="# times shot"></td>
+              <td><input name="dsc-0" placeholder="D S C"></td>
+              <td><input name="fullshooting-0" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-0" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-0" placeholder="Rate Driving"></td>
+              <td><input name="defense-0" placeholder="Defense"></td>
+              <td><input name="shuttle-0" placeholder="Shuttle"></td>
+              <td><input name="collectballs-0" placeholder="Collect Balls"></td>
+              <td><input name="endgame-0" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="0">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-1" placeholder="Match#"></td>
+              <td><input name="hung-1" placeholder="Hung"></td>
+              <td><input name="shotballs-1" placeholder="Shot Balls"></td>
+              <td><input name="collected-1" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-1" placeholder="# times shot"></td>
+              <td><input name="dsc-1" placeholder="D S C"></td>
+              <td><input name="fullshooting-1" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-1" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-1" placeholder="Rate Driving"></td>
+              <td><input name="defense-1" placeholder="Defense"></td>
+              <td><input name="shuttle-1" placeholder="Shuttle"></td>
+              <td><input name="collectballs-1" placeholder="Collect Balls"></td>
+              <td><input name="endgame-1" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="1">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-2" placeholder="Match#"></td>
+              <td><input name="hung-2" placeholder="Hung"></td>
+              <td><input name="shotballs-2" placeholder="Shot Balls"></td>
+              <td><input name="collected-2" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-2" placeholder="# times shot"></td>
+              <td><input name="dsc-2" placeholder="D S C"></td>
+              <td><input name="fullshooting-2" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-2" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-2" placeholder="Rate Driving"></td>
+              <td><input name="defense-2" placeholder="Defense"></td>
+              <td><input name="shuttle-2" placeholder="Shuttle"></td>
+              <td><input name="collectballs-2" placeholder="Collect Balls"></td>
+              <td><input name="endgame-2" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="2">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-3" placeholder="Match#"></td>
+              <td><input name="hung-3" placeholder="Hung"></td>
+              <td><input name="shotballs-3" placeholder="Shot Balls"></td>
+              <td><input name="collected-3" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-3" placeholder="# times shot"></td>
+              <td><input name="dsc-3" placeholder="D S C"></td>
+              <td><input name="fullshooting-3" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-3" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-3" placeholder="Rate Driving"></td>
+              <td><input name="defense-3" placeholder="Defense"></td>
+              <td><input name="shuttle-3" placeholder="Shuttle"></td>
+              <td><input name="collectballs-3" placeholder="Collect Balls"></td>
+              <td><input name="endgame-3" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="3">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-4" placeholder="Match#"></td>
+              <td><input name="hung-4" placeholder="Hung"></td>
+              <td><input name="shotballs-4" placeholder="Shot Balls"></td>
+              <td><input name="collected-4" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-4" placeholder="# times shot"></td>
+              <td><input name="dsc-4" placeholder="D S C"></td>
+              <td><input name="fullshooting-4" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-4" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-4" placeholder="Rate Driving"></td>
+              <td><input name="defense-4" placeholder="Defense"></td>
+              <td><input name="shuttle-4" placeholder="Shuttle"></td>
+              <td><input name="collectballs-4" placeholder="Collect Balls"></td>
+              <td><input name="endgame-4" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="4">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-5" placeholder="Match#"></td>
+              <td><input name="hung-5" placeholder="Hung"></td>
+              <td><input name="shotballs-5" placeholder="Shot Balls"></td>
+              <td><input name="collected-5" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-5" placeholder="# times shot"></td>
+              <td><input name="dsc-5" placeholder="D S C"></td>
+              <td><input name="fullshooting-5" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-5" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-5" placeholder="Rate Driving"></td>
+              <td><input name="defense-5" placeholder="Defense"></td>
+              <td><input name="shuttle-5" placeholder="Shuttle"></td>
+              <td><input name="collectballs-5" placeholder="Collect Balls"></td>
+              <td><input name="endgame-5" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="5">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-6" placeholder="Match#"></td>
+              <td><input name="hung-6" placeholder="Hung"></td>
+              <td><input name="shotballs-6" placeholder="Shot Balls"></td>
+              <td><input name="collected-6" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-6" placeholder="# times shot"></td>
+              <td><input name="dsc-6" placeholder="D S C"></td>
+              <td><input name="fullshooting-6" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-6" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-6" placeholder="Rate Driving"></td>
+              <td><input name="defense-6" placeholder="Defense"></td>
+              <td><input name="shuttle-6" placeholder="Shuttle"></td>
+              <td><input name="collectballs-6" placeholder="Collect Balls"></td>
+              <td><input name="endgame-6" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="6">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-7" placeholder="Match#"></td>
+              <td><input name="hung-7" placeholder="Hung"></td>
+              <td><input name="shotballs-7" placeholder="Shot Balls"></td>
+              <td><input name="collected-7" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-7" placeholder="# times shot"></td>
+              <td><input name="dsc-7" placeholder="D S C"></td>
+              <td><input name="fullshooting-7" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-7" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-7" placeholder="Rate Driving"></td>
+              <td><input name="defense-7" placeholder="Defense"></td>
+              <td><input name="shuttle-7" placeholder="Shuttle"></td>
+              <td><input name="collectballs-7" placeholder="Collect Balls"></td>
+              <td><input name="endgame-7" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="7">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-8" placeholder="Match#"></td>
+              <td><input name="hung-8" placeholder="Hung"></td>
+              <td><input name="shotballs-8" placeholder="Shot Balls"></td>
+              <td><input name="collected-8" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-8" placeholder="# times shot"></td>
+              <td><input name="dsc-8" placeholder="D S C"></td>
+              <td><input name="fullshooting-8" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-8" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-8" placeholder="Rate Driving"></td>
+              <td><input name="defense-8" placeholder="Defense"></td>
+              <td><input name="shuttle-8" placeholder="Shuttle"></td>
+              <td><input name="collectballs-8" placeholder="Collect Balls"></td>
+              <td><input name="endgame-8" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="8">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-9" placeholder="Match#"></td>
+              <td><input name="hung-9" placeholder="Hung"></td>
+              <td><input name="shotballs-9" placeholder="Shot Balls"></td>
+              <td><input name="collected-9" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-9" placeholder="# times shot"></td>
+              <td><input name="dsc-9" placeholder="D S C"></td>
+              <td><input name="fullshooting-9" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-9" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-9" placeholder="Rate Driving"></td>
+              <td><input name="defense-9" placeholder="Defense"></td>
+              <td><input name="shuttle-9" placeholder="Shuttle"></td>
+              <td><input name="collectballs-9" placeholder="Collect Balls"></td>
+              <td><input name="endgame-9" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="9">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-10" placeholder="Match#"></td>
+              <td><input name="hung-10" placeholder="Hung"></td>
+              <td><input name="shotballs-10" placeholder="Shot Balls"></td>
+              <td><input name="collected-10" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-10" placeholder="# times shot"></td>
+              <td><input name="dsc-10" placeholder="D S C"></td>
+              <td><input name="fullshooting-10" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-10" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-10" placeholder="Rate Driving"></td>
+              <td><input name="defense-10" placeholder="Defense"></td>
+              <td><input name="shuttle-10" placeholder="Shuttle"></td>
+              <td><input name="collectballs-10" placeholder="Collect Balls"></td>
+              <td><input name="endgame-10" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="10">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-11" placeholder="Match#"></td>
+              <td><input name="hung-11" placeholder="Hung"></td>
+              <td><input name="shotballs-11" placeholder="Shot Balls"></td>
+              <td><input name="collected-11" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-11" placeholder="# times shot"></td>
+              <td><input name="dsc-11" placeholder="D S C"></td>
+              <td><input name="fullshooting-11" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-11" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-11" placeholder="Rate Driving"></td>
+              <td><input name="defense-11" placeholder="Defense"></td>
+              <td><input name="shuttle-11" placeholder="Shuttle"></td>
+              <td><input name="collectballs-11" placeholder="Collect Balls"></td>
+              <td><input name="endgame-11" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="11">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-12" placeholder="Match#"></td>
+              <td><input name="hung-12" placeholder="Hung"></td>
+              <td><input name="shotballs-12" placeholder="Shot Balls"></td>
+              <td><input name="collected-12" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-12" placeholder="# times shot"></td>
+              <td><input name="dsc-12" placeholder="D S C"></td>
+              <td><input name="fullshooting-12" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-12" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-12" placeholder="Rate Driving"></td>
+              <td><input name="defense-12" placeholder="Defense"></td>
+              <td><input name="shuttle-12" placeholder="Shuttle"></td>
+              <td><input name="collectballs-12" placeholder="Collect Balls"></td>
+              <td><input name="endgame-12" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="12">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-13" placeholder="Match#"></td>
+              <td><input name="hung-13" placeholder="Hung"></td>
+              <td><input name="shotballs-13" placeholder="Shot Balls"></td>
+              <td><input name="collected-13" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-13" placeholder="# times shot"></td>
+              <td><input name="dsc-13" placeholder="D S C"></td>
+              <td><input name="fullshooting-13" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-13" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-13" placeholder="Rate Driving"></td>
+              <td><input name="defense-13" placeholder="Defense"></td>
+              <td><input name="shuttle-13" placeholder="Shuttle"></td>
+              <td><input name="collectballs-13" placeholder="Collect Balls"></td>
+              <td><input name="endgame-13" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="13">Remove</button></td>
+            </tr>
+            <tr>
+              <td><input name="match-14" placeholder="Match#"></td>
+              <td><input name="hung-14" placeholder="Hung"></td>
+              <td><input name="shotballs-14" placeholder="Shot Balls"></td>
+              <td><input name="collected-14" placeholder="Collected balls from The Middle"></td>
+              <td><input name="timesshot-14" placeholder="# times shot"></td>
+              <td><input name="dsc-14" placeholder="D S C"></td>
+              <td><input name="fullshooting-14" placeholder="Full when shooting?"></td>
+              <td><input name="accuracy-14" placeholder="Accuracy"></td>
+              <td><input name="ratedriving-14" placeholder="Rate Driving"></td>
+              <td><input name="defense-14" placeholder="Defense"></td>
+              <td><input name="shuttle-14" placeholder="Shuttle"></td>
+              <td><input name="collectballs-14" placeholder="Collect Balls"></td>
+              <td><input name="endgame-14" placeholder="endgame level"></td>
+              <td><button type="button" class="remove-row" data-idx="14">Remove</button></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="form-controls">
+          <button id="submit-btn" type="submit">Submit</button>
+          <button type="button" id="clear-all">Clear All</button>
+        </div>
+      </form>
+
+      <section id="submissions">
+        <h3>Saved Submissions</h3>
+        <ul id="subs-list"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <small>Stored locally.</small>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+      // Fallback page5 script to ensure buttons work even if app.js fails.
+      (function(){
+        const $ = s => document.querySelector(s);
+        const $$ = s => Array.from(document.querySelectorAll(s));
+
+        async function hashString(str){
+          const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+          return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+        }
+
+        async function setPassword(){
+          const current = localStorage.getItem('postmatch-pass');
+          if(current){
+            const attempt = prompt('Enter current password');
+            if(!attempt) return;
+            const h = await hashString(attempt);
+            if(h !== current){ alert('Incorrect password'); return; }
+          }
+          const p = prompt('Enter new password');
+          if(!p) return;
+          const confirm = prompt('Confirm new password');
+          if(p !== confirm){ alert('Passwords do not match'); return; }
+          localStorage.setItem('postmatch-pass', await hashString(p));
+          alert('Password set');
+        }
+
+        async function clearPassword(){
+          const current = localStorage.getItem('postmatch-pass');
+          if(!current){ alert('No password set'); return; }
+          const attempt = prompt('Enter current password to clear');
+          if(!attempt) return;
+          const h = await hashString(attempt);
+          if(h !== current){ alert('Incorrect password'); return; }
+          localStorage.removeItem('postmatch-pass');
+          alert('Password cleared');
+        }
+
+        function init(){
+          const addCol = $('#add-column');
+          const addRow = $('#add-row');
+          const setPwd = $('#set-password');
+          const clearPwd = $('#clear-password');
+          const form = $('#post-match-form');
+          const tableBody = $('#table-body');
+          const tableHead = $('#table-head');
+
+          if(!form) return;
+
+          function renderHeaders(){
+            // keep existing headers unless user adds columns
+            const cols = JSON.parse(localStorage.getItem('post-match-columns') || 'null') || [
+              {label:'Match#', name:'match'},
+              {label:'Hung', name:'hung'},
+              {label:'Shot Balls', name:'shotballs'},
+              {label:'Collected balls from The Middle', name:'collected'},
+              {label:'# times shot', name:'timesshot'},
+              {label:'D S C', name:'dsc'},
+              {label:'Full when shooting?', name:'fullshooting'},
+              {label:'Accuracy', name:'accuracy'},
+              {label:'Rate Driving', name:'ratedriving'},
+              {label:'Defense', name:'defense'},
+              {label:'Shuttle', name:'shuttle'},
+              {label:'Collect Balls', name:'collectballs'},
+              {label:'endgame level', name:'endgame'}
+            ];
+            localStorage.setItem('post-match-columns', JSON.stringify(cols));
+            tableHead.innerHTML = '<tr><th colspan="1">Match</th><th colspan="3">Shooting</th><th colspan="5">Driving</th><th colspan="3">Defense</th><th colspan="1">Endgame</th></tr><tr>' + cols.map(c=>`<th>${c.label}</th>`).join('') + '<th>Actions</th></tr>';
+          }
+
+          function addRow(){
+            const cols = JSON.parse(localStorage.getItem('post-match-columns') || '[]');
+            const idx = tableBody.children.length;
+            const tr = document.createElement('tr');
+            tr.innerHTML = cols.map(c=>`<td><input name="${c.name}-${idx}" placeholder="${c.label}"></td>`).join('') + `<td><button type="button" class="remove-row" data-idx="${idx}">Remove</button></td>`;
+            tableBody.appendChild(tr);
+          }
+
+          function addColumn(){
+            const label = prompt('New column label');
+            if(!label) return;
+            const cols = JSON.parse(localStorage.getItem('post-match-columns') || '[]');
+            const name = 'col' + Date.now();
+            cols.push({label, name});
+            localStorage.setItem('post-match-columns', JSON.stringify(cols));
+            renderHeaders();
+            // update existing rows with new input
+            Array.from(tableBody.children).forEach((tr, idx) => {
+              const td = document.createElement('td');
+              td.innerHTML = `<input name="${name}-${idx}" placeholder="${label}">`;
+              tr.insertBefore(td, tr.lastElementChild);
+            });
+          }
+
+          tableBody.addEventListener('click', e=>{
+            if(e.target.classList.contains('remove-row')){
+              const idx = Number(e.target.dataset.idx);
+              const row = tableBody.children[idx];
+              if(!row) return;
+              if(!confirm('Remove this row?')) return;
+              row.remove();
+              // reindex remaining
+              Array.from(tableBody.children).forEach((r, i)=>{
+                r.querySelector('.remove-row').dataset.idx = i;
+                r.querySelectorAll('input').forEach(inp=>{
+                  const parts = inp.name.split('-');
+                  parts[1] = i;
+                  inp.name = parts.join('-');
+                });
+              });
+            }
+          });
+
+          form.addEventListener('submit', e=>{
+            e.preventDefault();
+            const entries = Object.fromEntries(new FormData(form).entries());
+            const rows = {};
+            Object.entries(entries).forEach(([k,v])=>{
+              const [name, idx] = k.split('-');
+              if(!rows[idx]) rows[idx] = {};
+              rows[idx][name] = v;
+            });
+            const subs = JSON.parse(localStorage.getItem('post-match-submissions')||'[]');
+            subs.push(...Object.values(rows));
+            localStorage.setItem('post-match-submissions', JSON.stringify(subs));
+            alert('Submitted');
+          });
+
+          $('#clear-all').addEventListener('click', ()=>{
+            if(!confirm('Clear all?')) return;
+            localStorage.removeItem('post-match-submissions');
+            alert('Cleared');
+          });
+
+          addRow.addEventListener('click', addRow);
+          addCol.addEventListener('click', addColumn);
+          setPwd.addEventListener('click', setPassword);
+          clearPwd.addEventListener('click', clearPassword);
+
+          renderHeaders();
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+      })();
+    </script>
+  </body>
+</html>

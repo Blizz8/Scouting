@@ -11,12 +11,13 @@
   </head>
   <body>
     <header>
-      <h1>Scouting Form</h1>
+      <h1>Pit Scouting</h1>
       <nav>
         <a href="index.html">Home</a>
         <a href="page2.html">List</a>
-        <a href="page3.html">Form</a>
+        <a href="page3.html">Pit Scouting</a>
         <a href="page4.html">Events</a>
+        <a href="page5.html">Post-Match</a>
       </nav>
     </header>
 
@@ -24,10 +25,10 @@
       <p>Required fields: <strong>Team Number</strong>, <strong>Team Name</strong>, <strong>Leader</strong>, <strong>Auto Strat</strong>. Use <strong>Add Question</strong> to add custom questions. Submitting a form with a Team Number will create or update the data sheet (List page) for that team.</p>
 
       <div class="form-controls-top">
-        <button id="add-question">Add Question</button>
-        <button id="reset-defaults">Reset Defaults</button>
-        <button id="set-password">Set/Change Password</button>
-        <button id="clear-password" type="button">Clear Password</button>
+        <button type="button" id="add-question">Add Question</button>
+        <button type="button" id="reset-defaults">Reset Defaults</button>
+        <button type="button" id="set-password">Set/Change Password</button>
+        <button type="button" id="clear-password">Clear Password</button>
         <label for="teamsFile" style="margin-left:8px;color:#ff3333;font-size:.9rem">Upload teams.json</label>
         <input type="file" id="teamsFile" accept="application/json" style="margin-left:4px">
         <span id="teamsFileMsg" style="margin-left:8px;color:#ff3333;font-size:.9rem;display:none"></span>
@@ -37,7 +38,7 @@
         <div id="questions"></div>
 
         <div class="form-controls">
-          <button type="submit">Submit</button>
+          <button id="submit-btn" type="submit">Submit</button>
           <button type="button" id="clear-all">Clear All</button>
         </div>
       </form>
@@ -447,9 +448,12 @@
     "team_number": 1672,
     "website": "http://www.team1672.org/"
   },
-  {
-    "city": "Montvale",
+    {
+      "city": "Montvale"
+      // ... (if there are more team objects, add them here)
+    },
+  ];
     </script>
     <script src="app.js"></script>
-  }
+  </body>
 </html>

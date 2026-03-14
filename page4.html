@@ -1,103 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>FMA District Robbinsville Event 2025</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Events</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Events</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="page2.html">List</a>
+        <a href="page3.html">Pit Scouting</a>
+        <a href="page4.html">Events</a>
+        <a href="page5.html">Post-Match</a>
+      </nav>
+    </header>
 
-<style>
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f8;
-    text-align:center;
-}
+    <main>
+      <div class="event">
+        <div class="event-title" onclick="toggleTeams()">
+          FMA District Robbinsville Event 2025
+        </div>
+        <div id="teams" class="team-list">
+          <div class="team" data-number="25"><span class="team-number">25</span> - Raider Robotix</div>
+          <div class="team" data-number="87"><span class="team-number">87</span> - Diablo</div>
+          <div class="team" data-number="102"><span class="team-number">102</span> - The Gearheads</div>
+          <div class="team" data-number="204"><span class="team-number">204</span> - Eastern Robotic Vikings</div>
+          <div class="team" data-number="223"><span class="team-number">223</span> - Xtreme Heat</div>
+          <div class="team" data-number="293"><span class="team-number">293</span> - SPIKE</div>
+          <div class="team" data-number="486"><span class="team-number">486</span> - Positronic Panthers</div>
+          <div class="team" data-number="752"><span class="team-number">752</span> - Chargers</div>
+          <div class="team" data-number="834"><span class="team-number">834</span> - SparTechs</div>
+          <div class="team" data-number="1676"><span class="team-number">1676</span> - The Pascack PI-oneers</div>
+          <div class="team" data-number="1923"><span class="team-number">1923</span> - The MidKnight Inventors</div>
+          <div class="team" data-number="2191"><span class="team-number">2191</span> - Flux Core</div>
+          <div class="team" data-number="2495"><span class="team-number">2495</span> - Hive Mind</div>
+          <div class="team" data-number="2590"><span class="team-number">2590</span> - Nemesis</div>
+          <div class="team" data-number="3314"><span class="team-number">3314</span> - Mechanical Mustangs</div>
+          <div class="team" data-number="3340"><span class="team-number">3340</span> - Union City EagleX Robotics</div>
+          <div class="team" data-number="5438"><span class="team-number">5438</span> - Technological Terrors</div>
+          <div class="team" data-number="5624"><span class="team-number">5624</span> - TIGER TECH Robotics</div>
+          <div class="team" data-number="5666"><span class="team-number">5666</span> - Purple Lightning</div>
+          <div class="team" data-number="5684"><span class="team-number">5684</span> - Titans of Tech</div>
+          <div class="team" data-number="5732"><span class="team-number">5732</span> - ROBOTIGERS</div>
+          <div class="team" data-number="6897"><span class="team-number">6897</span> - Astraea Robotics</div>
+          <div class="team" data-number="8707"><span class="team-number">8707</span> - The Newark Circuit Breakers</div>
+          <div class="team" data-number="8714"><span class="team-number">8714</span> - Robo Griffins'</div>
+          <div class="team" data-number="9100"><span class="team-number">9100</span> - Robo Roses</div>
+          <div class="team" data-number="9116"><span class="team-number">9116</span> - The Canucks & Bolts</div>
+          <div class="team" data-number="10170"><span class="team-number">10170</span> - ND Robotics</div>
+          <div class="team" data-number="10366"><span class="team-number">10366</span> - Builder Bears</div>
+        </div>
+      </div>
 
-.event{
-    margin:40px auto;
-    width:500px;
-    background:white;
-    border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    padding:20px;
-}
+      <div id="team-info" style="display:none;">
+        <h3>Team Information</h3>
+        <pre id="info-content"></pre>
+      </div>
+    </main>
 
-.event-title{
-    font-size:22px;
-    font-weight:bold;
-    cursor:pointer;
-    color:#0057b7;
-}
+    <footer>
+      <small>Simple scouting pages — add content as needed.</small>
+    </footer>
 
-.team-list{
-    display:none;
-    margin-top:20px;
-    text-align:left;
-}
-
-.team{
-    padding:6px;
-    border-bottom:1px solid #ddd;
-}
-
-.team-number{
-    font-weight:bold;
-    color:#333;
-}
-</style>
-</head>
-
-<body>
-
-<div class="event">
-
-<div class="event-title" onclick="toggleTeams()">
-FMA District Robbinsville Event 2025 (Click to View Teams)
-</div>
-
-<div id="teams" class="team-list">
-
-<div class="team"><span class="team-number">25</span> - Raider Robotix</div>
-<div class="team"><span class="team-number">87</span> - Diablo</div>
-<div class="team"><span class="team-number">102</span> - The Gearheads</div>
-<div class="team"><span class="team-number">204</span> - Eastern Robotic Vikings</div>
-<div class="team"><span class="team-number">223</span> - Xtreme Heat</div>
-<div class="team"><span class="team-number">293</span> - SPIKE</div>
-<div class="team"><span class="team-number">486</span> - Positronic Panthers</div>
-<div class="team"><span class="team-number">752</span> - Chargers</div>
-<div class="team"><span class="team-number">834</span> - SparTechs</div>
-<div class="team"><span class="team-number">1676</span> - The Pascack PI-oneers</div>
-<div class="team"><span class="team-number">1923</span> - The MidKnight Inventors</div>
-<div class="team"><span class="team-number">2191</span> - Flux Core</div>
-<div class="team"><span class="team-number">2495</span> - Hive Mind</div>
-<div class="team"><span class="team-number">2590</span> - Nemesis</div>
-<div class="team"><span class="team-number">3314</span> - Mechanical Mustangs</div>
-<div class="team"><span class="team-number">3340</span> - Union City EagleX Robotics</div>
-<div class="team"><span class="team-number">5438</span> - Technological Terrors</div>
-<div class="team"><span class="team-number">5624</span> - TIGER TECH Robotics</div>
-<div class="team"><span class="team-number">5666</span> - Purple Lightning</div>
-<div class="team"><span class="team-number">5684</span> - Titans of Tech</div>
-<div class="team"><span class="team-number">5732</span> - ROBOTIGERS</div>
-<div class="team"><span class="team-number">6897</span> - Astraea Robotics</div>
-<div class="team"><span class="team-number">8707</span> - The Newark Circuit Breakers</div>
-<div class="team"><span class="team-number">8714</span> - Robo Griffins'</div>
-<div class="team"><span class="team-number">9100</span> - Robo Roses</div>
-<div class="team"><span class="team-number">9116</span> - The Canucks & Bolts</div>
-<div class="team"><span class="team-number">10170</span> - ND Robotics</div>
-<div class="team"><span class="team-number">10366</span> - Builder Bears</div>
-
-</div>
-</div>
-
-<script>
-function toggleTeams(){
-    const list = document.getElementById("teams");
-
-    if(list.style.display === "none" || list.style.display === ""){
-        list.style.display = "block";
-    } else {
-        list.style.display = "none";
-    }
-}
-</script>
+    <script src="app.js"></script>
+  </body>
+</html>
 
 </body>
 </html>

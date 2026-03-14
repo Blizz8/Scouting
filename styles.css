@@ -23,4 +23,8 @@ input{width:100%;padding:.5rem;background:#111;border:1px solid var(--border);co
 .edit{color:var(--text);background:transparent;border:none}
 footer{margin-top:1.5rem;color:var(--text)}
 button{cursor:pointer;background:transparent;color:var(--text);border:1px solid var(--text);padding:.25rem .5rem;border-radius:2px}
-small{font-size:.8rem}
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+th, td { border: 1px solid var(--border); padding: 0.5rem; text-align: left; }
+th { background: var(--bg); color: var(--text); }
+input { width: 100%; }
+.team { padding-left: 20px; }
