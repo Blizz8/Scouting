@@ -39,122 +39,36 @@ async function clearPasswordFlow(){
   alert('Password cleared');
 }
 
-// --- List storage helpers (shared) ---
-function getListEntries(){
-  const raw = localStorage.getItem('list-entries');
-  if(!raw) return [
-    {id:'25', text:'Team Number: 25\nTeam Name: Raider Robotix\nLeader: John Doe\nAuto Strat: Aggressive climber\nAuto Climb?: Yes\nScore Accuracy?: High\nShooting Cycle Number?: 5\nDefense Rating?: 8\nClimb Time?: 10 seconds\nEndgame Climb?: Yes', meta:{teamName:'Raider Robotix', leader:'John Doe', autoStrat:'Aggressive climber'}},
-    {id:'87', text:'Team Number: 87\nTeam Name: Diablo\nLeader: Jane Smith\nAuto Strat: Balanced scorer\nAuto Climb?: No\nScore Accuracy?: Medium\nShooting Cycle Number?: 3\nDefense Rating?: 7\nClimb Time?: 15 seconds\nEndgame Climb?: No', meta:{teamName:'Diablo', leader:'Jane Smith', autoStrat:'Balanced scorer'}},
-    {id:'102', text:'Team Number: 102\nTeam Name: The Gearheads\nLeader: Bob Johnson\nAuto Strat: Defensive specialist\nAuto Climb?: Yes\nScore Accuracy?: High\nShooting Cycle Number?: 6\nDefense Rating?: 9\nClimb Time?: 8 seconds\nEndgame Climb?: Yes', meta:{teamName:'The Gearheads', leader:'Bob Johnson', autoStrat:'Defensive specialist'}}
-  ];
-  return JSON.parse(raw);
+// --- Shared submissions storage ---
+function loadSubs(){
+  const raw = localStorage.getItem('submissions');
+  let subs = raw ? JSON.parse(raw) : [];
+  // Migrate from object
+  if(!Array.isArray(subs)){
+    const flattened = [];
+    Object.keys(subs).forEach(team => {
+      (subs[team].pit || []).forEach(s => { s.type = 'pit'; flattened.push(s); });
+      (subs[team].post || []).forEach(s => { s.type = 'post'; flattened.push(s); });
+    });
+    subs = flattened;
+    localStorage.setItem('submissions', JSON.stringify(subs));
+  }
+  // Migrate old post-match
+  const oldPost = localStorage.getItem('post-match-submissions');
+  if(oldPost){
+    const postSubs = JSON.parse(oldPost);
+    postSubs.forEach(row => { row.type = 'post'; subs.push(row); });
+    localStorage.removeItem('post-match-submissions');
+    localStorage.setItem('submissions', JSON.stringify(subs));
+  }
+  return subs;
 }
-function setListEntries(arr){
-  localStorage.setItem('list-entries', JSON.stringify(arr));
-}
-function addOrUpdateListEntry(id, text, meta){
-  id = String(id).trim();
-  const entries = getListEntries();
-  const idx = entries.findIndex(e=>String(e.id).trim() === id);
-  if(idx>=0){ entries[idx].text = text; entries[idx].meta = Object.assign({}, entries[idx].meta || {}, meta || {}); }
-  else { entries.push({id, text, meta: meta||{}}); }
-  setListEntries(entries);
-}
-function removeListEntryById(id){
-  id = String(id);
-  let entries = getListEntries();
-  entries = entries.filter(e=>String(e.id) !== id);
-  setListEntries(entries);
+function saveSubs(arr){
+  localStorage.setItem('submissions', JSON.stringify(arr));
 }
 
 // --- List (page2) ---
-function initListPage(){
-  const list = $('#number-list');
-  if(!list) return;
 
-  const savedList = $('#saved-list');
-  const addBtn = $('#add-entry');
-  const setPwdBtn = $('#set-password');
-  const clearPwdBtn = $('#clear-password');
-
-  setPwdBtn.addEventListener('click', setPasswordFlow);
-  clearPwdBtn.addEventListener('click', clearPasswordFlow);
-  if(addBtn) addBtn.addEventListener('click', ()=>{ addEntry(); });
-
-  function renderList(){
-    const entries = getListEntries();
-    // sort: numeric if possible
-    entries.sort((a,b)=>{
-      const na = Number(a.id), nb = Number(b.id);
-      if(!Number.isNaN(na) && !Number.isNaN(nb)) return na - nb;
-      return String(a.id).localeCompare(String(b.id));
-    });
-
-    list.innerHTML = entries.map(e=>`<li data-id="${escapeHtml(String(e.id))}"><button class="num-btn">${escapeHtml(String(e.id))}</button> <button class="del btn-inline" data-id="${escapeHtml(String(e.id))}">Delete</button>
-      <div class="info" hidden>
-        <textarea rows="6">${escapeHtml(e.text||'')}</textarea>
-        <div class="controls"><button class="save">Save</button></div>
-      </div>
-    </li>`).join('');
-
-    $$('#number-list li').forEach(li=>{
-      const id = String(li.dataset.id);
-      const btn = li.querySelector('.num-btn');
-      const del = li.querySelector('.del');
-      const info = li.querySelector('.info');
-      const ta = li.querySelector('textarea');
-      const saveBtn = li.querySelector('.save');
-
-      btn.addEventListener('click', ()=> info.hidden = !info.hidden );
-
-      saveBtn.addEventListener('click', async ()=>{
-        const ok = await verifyPassword('Enter password to save changes');
-        if(!ok){ alert('Canceled or incorrect password'); return; }
-        const entries = getListEntries();
-        const idx = entries.findIndex(x=>String(x.id)===id);
-        if(idx>=0){ entries[idx].text = ta.value; setListEntries(entries); renderList(); renderSavedList(); alert('Saved'); }
-      });
-
-      del.addEventListener('click', async ()=>{
-        const ok = await verifyPassword('Enter password to delete this entry');
-        if(!ok){ alert('Canceled or incorrect password'); return; }
-        removeListEntryById(id);
-        renderList(); renderSavedList();
-      });
-    });
-  }
-
-  function renderSavedList(){
-    const entries = getListEntries();
-    if(!entries.length){ savedList.innerHTML = '<li>(no entries)</li>'; return; }
-    savedList.innerHTML = entries.map(e=>`<li><strong>${escapeHtml(String(e.id))}:</strong> ${escapeHtml(e.meta?.teamName || e.text || '(empty)')}</li>`).join('');
-  }
-
-  function addEntry(){
-    const entries = getListEntries();
-    // make a numeric-ish id if possible
-    const numericIds = entries.map(x=>Number(x.id)).filter(n=>!Number.isNaN(n));
-    const max = numericIds.length?Math.max(...numericIds):0;
-    const next = String(max+1);
-    entries.push({id:next,text:''});
-    setListEntries(entries);
-    renderList(); renderSavedList();
-    setTimeout(()=>{ const li = $(`#number-list li[data-id="${next}"]`); if(li) li.querySelector('.num-btn').click(); }, 50);
-  }
-
-  renderList();
-  renderSavedList();
-
-  // Check for team parameter in URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const teamParam = urlParams.get('team');
-  if(teamParam){
-    const li = $(`#number-list li[data-id="${teamParam}"]`);
-    if(li){
-      li.querySelector('.num-btn').click();
-    }
-  }
-}
 
 // --- Form (page3) ---
 const defaultQuestions = [
@@ -259,15 +173,6 @@ function initFormPage(){
     setTimeout(()=>{ const lastInp = $(`#questions .q[data-idx="${qs.length-1}"] input[name]`); if(lastInp) lastInp.focus(); }, 50);
   }
 
-  function loadSubs(){
-    const raw = localStorage.getItem('submissions');
-    return raw?JSON.parse(raw):[];
-  }
-  function saveSubs(arr){
-    localStorage.setItem('submissions', JSON.stringify(arr));
-    renderSubs();
-  }
-
   function renderSubs(){
     const subs = loadSubs();
     if(!subs.length){ subsList.innerHTML = '<li>No submissions yet</li>'; return; }
@@ -338,6 +243,7 @@ function initFormPage(){
     addOrUpdateListEntry(teamNum, summary, meta);
     // also save submission copy
     const subs = loadSubs();
+    data.type = 'pit';
     if(editingIndex === null){ subs.push(data); } else { subs[editingIndex] = data; editingIndex = null; $('#submit-btn').textContent = 'Submit'; }
     saveSubs(subs);
 
@@ -365,6 +271,7 @@ function initFormPage(){
 
 // --- Post-Match (page5) ---
 const defaultPostMatchColumns = [
+  {label:'Team Number', name:'teamNumber'},
   {label:'Match#', name:'match'},
   {label:'Hung', name:'hung'},
   {label:'Shot Balls', name:'shotballs'},
@@ -496,14 +403,15 @@ function initPostMatchPage(){
     });
     const submissions = Object.values(rows).filter(r=>Object.values(r).some(v=>v));
 
-    // Save to localStorage for post-match
-    const existing = JSON.parse(localStorage.getItem('post-match-submissions') || '[]');
-    existing.push(...submissions);
-    localStorage.setItem('post-match-submissions', JSON.stringify(existing));
+    // Save to shared submissions storage
+    const subs = loadSubs ? loadSubs() : JSON.parse(localStorage.getItem('submissions') || '[]');
+    submissions.forEach(row => { row.type = 'post'; subs.push(row); });
+    if(saveSubs) saveSubs(subs);
+    else localStorage.setItem('submissions', JSON.stringify(subs));
 
     // Also save team results into the shared list (for list page lookup)
     submissions.forEach(row=>{
-      const teamId = (row.team || row.teamNumber || row['Team Number'] || row['team-number'] || '').trim();
+      const teamId = (row.teamNumber || row.team || '').trim();
       if(!teamId) return;
       const summary = Object.entries(row).map(([k,v])=>`${k}: ${v}`).join('\n');
       // Append to existing entry if present
@@ -513,7 +421,7 @@ function initPostMatchPage(){
         entries[idx].text += '\n\n--- Match Data ---\n' + summary;
         entries[idx].meta = Object.assign({}, entries[idx].meta || {}, { score: row.score || '' });
       } else {
-        entries.push({id: teamId, text: summary, meta: { teamName: row.teamName || row['Team Name'] || '', score: row.score || '' }});
+        entries.push({id: teamId, text: summary, meta: { teamName: row.teamName || '', score: row.score || '' }});
       }
       setListEntries(entries);
     });
@@ -523,14 +431,47 @@ function initPostMatchPage(){
   };
 
   function renderSubs(){
-    const subs = JSON.parse(localStorage.getItem('post-match-submissions') || '[]');
-    if(!subs.length){ subsList.innerHTML = '<li>No submissions</li>'; return; }
-    subsList.innerHTML = subs.map((s,idx)=>`<li>${Object.entries(s).map(([k,v])=>`${k}: ${v}`).join(', ')} <button data-idx="${idx}" class="del">Delete</button></li>`).join('');
+    const subs = loadSubs ? loadSubs() : JSON.parse(localStorage.getItem('submissions') || '[]');
+    const teams = {};
+    subs.filter(s => s.type === 'post').forEach(s => {
+      const team = (s.teamNumber || s.team || '').trim();
+      if(team){
+        if(!teams[team]) teams[team] = [];
+        teams[team].push(s);
+      }
+    });
+    const teamKeys = Object.keys(teams);
+    if(!teamKeys.length){ subsList.innerHTML = '<li>No post-match submissions</li>'; return; }
+    let html = '';
+    teamKeys.forEach(team => {
+      html += `<li><strong>Team ${team}</strong></li>`;
+      teams[team].forEach((s,idx)=> {
+        html += `<li>&nbsp;&nbsp;${Object.entries(s).map(([k,v])=>`${k}: ${v}`).join(', ')} <button data-team="${team}" data-idx="${idx}" class="del">Delete</button></li>`;
+      });
+    });
+    subsList.innerHTML = html;
+
+    $$('#subs-list .del').forEach(btn=>btn.addEventListener('click', async ()=>{
+      const team = btn.dataset.team;
+      const idx = Number(btn.dataset.idx);
+      const ok = await verifyPassword('Enter password to delete submission');
+      if(!ok){ alert('Canceled or incorrect password'); return; }
+      const subs = loadSubs ? loadSubs() : JSON.parse(localStorage.getItem('submissions') || '[]');
+      const toDelete = teams[team][idx];
+      const globalIdx = subs.indexOf(toDelete);
+      if(globalIdx >=0) subs.splice(globalIdx,1);
+      if(saveSubs) saveSubs(subs);
+      else localStorage.setItem('submissions', JSON.stringify(subs));
+      renderSubs();
+    }));
   }
 
   $('#clear-all').addEventListener('click', ()=>{
-    if(!confirm('Clear all?')) return;
-    localStorage.removeItem('post-match-submissions');
+    if(!confirm('Clear all post-match submissions?')) return;
+    const subs = loadSubs ? loadSubs() : JSON.parse(localStorage.getItem('submissions') || '[]');
+    const filtered = subs.filter(s => s.type !== 'post');
+    if(saveSubs) saveSubs(filtered);
+    else localStorage.setItem('submissions', JSON.stringify(filtered));
     renderSubs();
   });
 
@@ -588,71 +529,57 @@ function initListPage(){
   clearPwdBtn.addEventListener('click', clearPasswordFlow);
 
   function renderList(){
-    const entries = getListEntries();
-    if(!entries.length){
-      listEl.innerHTML = '<li>No entries yet. Add one or submit data from other pages.</li>';
-      return;
-    }
-    listEl.innerHTML = entries.map((e, idx) => `
-      <li data-id="${escapeHtml(e.id)}">
-        <span class="num-btn">${escapeHtml(e.id)}</span> - ${escapeHtml(e.meta.teamName || 'Unknown')}
-        <button class="edit-btn" data-idx="${idx}">Edit</button>
-        <button class="del-btn" data-idx="${idx}">Delete</button>
-      </li>
-    `).join('');
-
-    // Click to show info
-    $$('.num-btn').forEach(btn => btn.addEventListener('click', () => {
-      const id = btn.parentElement.dataset.id;
-      const entry = entries.find(e => String(e.id).trim() === String(id).trim());
-      if(entry){
-        $('#info-content').textContent = entry.text;
-        $('#team-info').style.display = 'block';
+    const subs = loadSubs();
+    const teams = {};
+    subs.forEach(s => {
+      const team = (s.teamNumber || s.team || '').trim();
+      if(team){
+        if(!teams[team]) teams[team] = {pit: [], post: []};
+        teams[team][s.type || 'pit'].push(s);
       }
-    }));
+    });
+    const teamKeys = Object.keys(teams);
+    if(!teamKeys.length){ listEl.innerHTML = '<li>No submissions</li>'; return; }
+    let html = '';
+    teamKeys.forEach(team => {
+      html += `<li><strong>Team ${team}</strong></li>`;
+      const pit = teams[team].pit || [];
+      const post = teams[team].post || [];
+      pit.forEach((s,idx)=> {
+        html += `<li>&nbsp;&nbsp;Pit: ${Object.values(s).map(v=>escapeHtml(v)).join(' | ')} <button data-team="${team}" data-type="pit" data-idx="${idx}" class="del">Delete</button></li>`;
+      });
+      post.forEach((s,idx)=> {
+        html += `<li>&nbsp;&nbsp;Post-Match: ${Object.entries(s).map(([k,v])=>`${k}: ${v}`).join(', ')} <button data-team="${team}" data-type="post" data-idx="${idx}" class="del">Delete</button></li>`;
+      });
+    });
+    listEl.innerHTML = html;
 
-    // Edit
-    $$('.edit-btn').forEach(btn => btn.addEventListener('click', async () => {
+    $$('#number-list .del').forEach(btn=>btn.addEventListener('click', async ()=>{
+      const team = btn.dataset.team;
+      const type = btn.dataset.type;
       const idx = Number(btn.dataset.idx);
-      const ok = await verifyPassword('Enter password to edit');
-      if(!ok) return;
-      const entry = entries[idx];
-      const newText = prompt('Edit info:', entry.text);
-      if(newText !== null){
-        entry.text = newText;
-        setListEntries(entries);
-        renderList();
-      }
-    }));
-
-    // Delete
-    $$('.del-btn').forEach(btn => btn.addEventListener('click', async () => {
-      const idx = Number(btn.dataset.idx);
-      const ok = await verifyPassword('Enter password to delete');
-      if(!ok) return;
-      entries.splice(idx, 1);
-      setListEntries(entries);
+      const ok = await verifyPassword('Enter password to delete submission');
+      if(!ok){ alert('Canceled or incorrect password'); return; }
+      const subs = loadSubs();
+      const toDelete = teams[team][type][idx];
+      const globalIdx = subs.indexOf(toDelete);
+      if(globalIdx >=0) subs.splice(globalIdx,1);
+      saveSubs(subs);
       renderList();
     }));
   }
 
   addBtn.addEventListener('click', () => {
-    const id = prompt('Team number:');
-    if(!id) return;
-    const text = prompt('Info:');
-    if(text === null) return;
-    addOrUpdateListEntry(id, text);
-    renderList();
+    alert('Use the other pages to add submissions.');
   });
 
   // Check for team param
   const urlParams = new URLSearchParams(window.location.search);
   const teamParam = urlParams.get('team');
   if(teamParam){
-    const li = $(`#number-list li[data-id="${teamParam}"]`);
-    if(li){
-      li.querySelector('.num-btn').click();
-    }
+    // Scroll to the team
+    const teamLi = Array.from(listEl.children).find(li => li.textContent.includes(`Team ${teamParam}`));
+    if(teamLi) teamLi.scrollIntoView();
   }
 
   renderList();

@@ -35,6 +35,7 @@
         <table id="scouting-table">
           <thead id="table-head">
             <tr>
+              <th>Team Number</th>
               <th>Match#</th>
               
               <th>Hung</th>
@@ -52,10 +53,12 @@
               <th>Collect Balls</th>
               
               <th>endgame level</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="table-body">
             <tr>
+              <td><input name="teamNumber-0" placeholder="Team Number"></td>
               <td><input name="match-0" placeholder="Match#"></td>
               <td><input name="hung-0" placeholder="Hung"></td>
               <td><input name="shotballs-0" placeholder="Shot Balls"></td>
@@ -72,6 +75,7 @@
               <td><button type="button" class="remove-row" data-idx="0">Remove</button></td>
             </tr>
             <tr>
+              <td><input name="teamNumber-1" placeholder="Team Number"></td>
               <td><input name="match-1" placeholder="Match#"></td>
               <td><input name="hung-1" placeholder="Hung"></td>
               <td><input name="shotballs-1" placeholder="Shot Balls"></td>
@@ -88,6 +92,7 @@
               <td><button type="button" class="remove-row" data-idx="1">Remove</button></td>
             </tr>
             <tr>
+              <td><input name="teamNumber-2" placeholder="Team Number"></td>
               <td><input name="match-2" placeholder="Match#"></td>
               <td><input name="hung-2" placeholder="Hung"></td>
               <td><input name="shotballs-2" placeholder="Shot Balls"></td>
@@ -104,6 +109,7 @@
               <td><button type="button" class="remove-row" data-idx="2">Remove</button></td>
             </tr>
             <tr>
+              <td><input name="teamNumber-3" placeholder="Team Number"></td>
               <td><input name="match-3" placeholder="Match#"></td>
               <td><input name="hung-3" placeholder="Hung"></td>
               <td><input name="shotballs-3" placeholder="Shot Balls"></td>
@@ -120,6 +126,7 @@
               <td><button type="button" class="remove-row" data-idx="3">Remove</button></td>
             </tr>
             <tr>
+              <td><input name="teamNumber-4" placeholder="Team Number"></td>
               <td><input name="match-4" placeholder="Match#"></td>
               <td><input name="hung-4" placeholder="Hung"></td>
               <td><input name="shotballs-4" placeholder="Shot Balls"></td>
@@ -365,6 +372,7 @@
           if(!form) return;
 
           const defaultCols = [
+            {label:'Team Number', name:'teamNumber'},
             {label:'Match#', name:'match'},
             {label:'Hung', name:'hung'},
             {label:'Shot Balls', name:'shotballs'},
@@ -476,6 +484,7 @@
           clearPwd.addEventListener('click', clearPassword);
 
           renderHeaders();
+          tableBody.innerHTML = '';
           ensureMinRows(15);
         }
 
