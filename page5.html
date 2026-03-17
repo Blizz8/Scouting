@@ -364,33 +364,54 @@
 
           if(!form) return;
 
-          function renderHeaders(){
-            // keep existing headers unless user adds columns
-            const cols = JSON.parse(localStorage.getItem('post-match-columns') || 'null') || [
-              {label:'Match#', name:'match'},
-              {label:'Hung', name:'hung'},
-              {label:'Shot Balls', name:'shotballs'},
-              {label:'Collected balls from The Middle', name:'collected'},
-              {label:'# times shot', name:'timesshot'},
-              {label:'D S C', name:'dsc'},
-              {label:'Full when shooting?', name:'fullshooting'},
-              {label:'Accuracy', name:'accuracy'},
-              {label:'Rate Driving', name:'ratedriving'},
-              {label:'Defense', name:'defense'},
-              {label:'Shuttle', name:'shuttle'},
-              {label:'Collect Balls', name:'collectballs'},
-              {label:'endgame level', name:'endgame'}
-            ];
+          const defaultCols = [
+            {label:'Match#', name:'match'},
+            {label:'Hung', name:'hung'},
+            {label:'Shot Balls', name:'shotballs'},
+            {label:'Collected balls from The Middle', name:'collected'},
+            {label:'# times shot', name:'timesshot'},
+            {label:'D S C', name:'dsc'},
+            {label:'Full when shooting?', name:'fullshooting'},
+            {label:'Accuracy', name:'accuracy'},
+            {label:'Rate Driving', name:'ratedriving'},
+            {label:'Defense', name:'defense'},
+            {label:'Shuttle', name:'shuttle'},
+            {label:'Collect Balls', name:'collectballs'},
+            {label:'endgame level', name:'endgame'}
+          ];
+
+          function getCols(){
+            const saved = JSON.parse(localStorage.getItem('post-match-columns') || '[]');
+            // Start with defaults, then append any extra saved columns (preserve order)
+            const names = new Set(defaultCols.map(c=>c.name));
+            const cols = defaultCols.slice();
+            (saved || []).forEach(c=>{
+              if(!c || !c.name || !c.label) return;
+              if(names.has(c.name)) return;
+              names.add(c.name);
+              cols.push(c);
+            });
             localStorage.setItem('post-match-columns', JSON.stringify(cols));
+            return cols;
+          }
+
+          function renderHeaders(){
+            const cols = getCols();
             tableHead.innerHTML = '<tr><th colspan="1">Match</th><th colspan="3">Shooting</th><th colspan="5">Driving</th><th colspan="3">Defense</th><th colspan="1">Endgame</th></tr><tr>' + cols.map(c=>`<th>${c.label}</th>`).join('') + '<th>Actions</th></tr>';
           }
 
           function addRow(){
-            const cols = JSON.parse(localStorage.getItem('post-match-columns') || '[]');
+            const cols = getCols();
             const idx = tableBody.children.length;
             const tr = document.createElement('tr');
             tr.innerHTML = cols.map(c=>`<td><input name="${c.name}-${idx}" placeholder="${c.label}"></td>`).join('') + `<td><button type="button" class="remove-row" data-idx="${idx}">Remove</button></td>`;
             tableBody.appendChild(tr);
+          }
+
+          function ensureMinRows(minRows = 15){
+            while(tableBody.children.length < minRows){
+              addRow();
+            }
           }
 
           function addColumn(){
@@ -455,6 +476,7 @@
           clearPwd.addEventListener('click', clearPassword);
 
           renderHeaders();
+          ensureMinRows(15);
         }
 
         if (document.readyState === 'loading') {

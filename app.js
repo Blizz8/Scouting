@@ -365,15 +365,41 @@ function initFormPage(){
 
 // --- Post-Match (page5) ---
 const defaultPostMatchColumns = [
-  {label:'Match', name:'match'},
-  {label:'Team Number', name:'team'},
-  {label:'Score', name:'score'}
+  {label:'Match#', name:'match'},
+  {label:'Hung', name:'hung'},
+  {label:'Shot Balls', name:'shotballs'},
+  {label:'Collected balls from The Middle', name:'collected'},
+  {label:'# times shot', name:'timesshot'},
+  {label:'D S C', name:'dsc'},
+  {label:'Full when shooting?', name:'fullshooting'},
+  {label:'Accuracy', name:'accuracy'},
+  {label:'Rate Driving', name:'ratedriving'},
+  {label:'Defense', name:'defense'},
+  {label:'Shuttle', name:'shuttle'},
+  {label:'Collect Balls', name:'collectballs'},
+  {label:'endgame level', name:'endgame'}
 ];
 
 function loadPostMatchColumns(){
   const raw = localStorage.getItem('post-match-columns');
   if(!raw) return defaultPostMatchColumns.slice();
-  return JSON.parse(raw);
+
+  const saved = JSON.parse(raw);
+  // Ensure defaults are always present and in order
+  const names = new Set(defaultPostMatchColumns.map(c=>c.name));
+  const cols = defaultPostMatchColumns.slice();
+  (saved || []).forEach(c=>{
+    if(!c || !c.name || !c.label) return;
+    if(names.has(c.name)) return;
+    names.add(c.name);
+    cols.push(c);
+  });
+
+  // Persist normalized column list so we don't revert back to an old saved set
+  const normalized = JSON.stringify(cols);
+  if(normalized !== raw) localStorage.setItem('post-match-columns', normalized);
+
+  return cols;
 }
 function savePostMatchColumns(arr){
   localStorage.setItem('post-match-columns', JSON.stringify(arr));
