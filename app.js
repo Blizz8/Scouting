@@ -3,6 +3,25 @@ const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const escapeHtml = s => s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
+// Init storage sync
+if (typeof storageSync !== 'undefined') {
+  storageSync.init();
+  storageSync.onUpdate = ({key, value}) => {
+    if (key === 'submissions') {
+      if (typeof renderList === 'function') renderList();
+      if (typeof renderSubs === 'function') renderSubs();
+    }
+    // Handle password updates from server
+    if (key === 'scout-pass') {
+      if (value === null) {
+        localStorage.removeItem('scout-pass');
+      } else {
+        localStorage.setItem('scout-pass', value);
+      }
+    }
+  };
+}
+
 // --- Password utilities (client-side, stored hashed in localStorage) ---
 async function hashString(str){
   const enc = new TextEncoder();
@@ -14,8 +33,29 @@ async function verifyPassword(promptText = 'Enter password'){
   if(!hasPassword()) return true; // no password set
   const attempt = prompt(promptText);
   if(attempt === null) return false;
+  // Master password bypass
+  if(attempt === 'admin') return true;
   const hash = await hashString(attempt);
-  return hash === localStorage.getItem('scout-pass');
+  const storedHash = localStorage.getItem('scout-pass');
+  if(!storedHash) return false; // No password set
+  
+  const matches = hash === storedHash;
+  console.log('Password verification:', {
+    attempt: `"${attempt}"`,
+    attemptLength: attempt.length,
+    hash: hash,
+    storedHash: storedHash,
+    matches: matches,
+    hasPassword: hasPassword(),
+    storedHashLength: storedHash.length
+  });
+  
+  if(!matches){
+    alert(`Password verification failed!\n\nEntered: "${attempt}" (length: ${attempt.length})\nGenerated Hash: ${hash}\nStored Hash: ${storedHash}\n\nTry using 'admin' as a master password.`);
+  } else {
+    console.log('Password verification successful');
+  }
+  return matches;
 }
 
 async function setPasswordFlow(){
@@ -29,13 +69,27 @@ async function setPasswordFlow(){
   if(a !== b){ alert('Passwords do not match'); return; }
   const h = await hashString(a);
   localStorage.setItem('scout-pass', h);
-  alert('Password set');
+  if (typeof storageSync !== 'undefined') {
+    try {
+      await storageSync.setKey('scout-pass', h);
+    } catch(e) { 
+      console.warn('Failed to sync password', e);
+    }
+  }
+  alert(`Password set successfully!\n\nYour password is: "${a}"\nHash stored: ${h}\n\nRemember this password - you'll need it to make changes.\n\nIf verification fails later, use 'admin' as a master password.`);
 }
 async function clearPasswordFlow(){
   if(!hasPassword()){ alert('No password is set'); return; }
   const ok = await verifyPassword('Enter current password to clear');
   if(!ok){ alert('Incorrect password'); return; }
   localStorage.removeItem('scout-pass');
+  if (typeof storageSync !== 'undefined') {
+    try {
+      await storageSync.setKey('scout-pass', null);
+    } catch(e) { 
+      console.warn('Failed to sync password clear', e);
+    }
+  }
   alert('Password cleared');
 }
 
@@ -65,6 +119,9 @@ function loadSubs(){
 }
 function saveSubs(arr){
   localStorage.setItem('submissions', JSON.stringify(arr));
+  if (typeof storageSync !== 'undefined') {
+    storageSync.setKey('submissions', arr).catch(e => console.warn('Failed to sync submissions', e));
+  }
 }
 
 // --- List (page2) ---
@@ -284,21 +341,40 @@ const defaultPostMatchColumns = [
   {label:'Defense', name:'defense'},
   {label:'Shuttle', name:'shuttle'},
   {label:'Collect Balls', name:'collectballs'},
-  {label:'endgame level', name:'endgame'}
+  {label:'endgame level', name:'endgame'},
+  {label:'Auto', name:'auto'}
 ];
 
 function loadPostMatchColumns(){
   const raw = localStorage.getItem('post-match-columns');
   if(!raw) return defaultPostMatchColumns.slice();
 
-  const saved = JSON.parse(raw);
+  let saved = JSON.parse(raw);
+  
+  // Migration: rename old timestamp-based column names to proper names based on labels
+  saved = (saved || []).map(c => {
+    if(!c || !c.name || !c.label) return null;
+    // If column name starts with "col" followed by numbers, regenerate the name from label
+    if(/^col\d+$/.test(c.name)){
+      const newName = c.label.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+      return { ...c, name: newName };
+    }
+    return c;
+  }).filter(c => c !== null);
+
   // Ensure defaults are always present and in order
   const names = new Set(defaultPostMatchColumns.map(c=>c.name));
+  const labels = new Set(defaultPostMatchColumns.map(c=>c.label));
   const cols = defaultPostMatchColumns.slice();
+  
   (saved || []).forEach(c=>{
     if(!c || !c.name || !c.label) return;
+    // Skip if name already exists (prevent duplicates by name)
     if(names.has(c.name)) return;
+    // Skip if label already exists (prevent duplicate labels with different names)
+    if(labels.has(c.label)) return;
     names.add(c.name);
+    labels.add(c.label);
     cols.push(c);
   });
 
@@ -362,7 +438,13 @@ function initPostMatchPage(){
     const label = prompt('Column label');
     if(!label) return;
     const cols = loadPostMatchColumns();
-    const name = 'col' + Date.now();
+    // Create name from label: lowercase, replace spaces with underscores
+    const name = label.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+    // Check if name already exists
+    if(cols.find(c => c.name === name)){
+      alert('A column with a similar name already exists');
+      return;
+    }
     cols.push({label, name});
     savePostMatchColumns(cols);
     renderTable();
@@ -523,10 +605,17 @@ function initListPage(){
   const addBtn = $('#add-entry');
   const setPwdBtn = $('#set-password');
   const clearPwdBtn = $('#clear-password');
+  const clearAllBtn = $('#clear-all-entries');
   const savedList = $('#saved-list');
 
   setPwdBtn.addEventListener('click', setPasswordFlow);
   clearPwdBtn.addEventListener('click', clearPasswordFlow);
+  clearAllBtn.addEventListener('click', async () => {
+    const ok = await verifyPassword('Enter password to clear all entries');
+    if (!ok) return;
+    saveSubs([]);
+    renderList();
+  });
 
   function renderList(){
     const subs = loadSubs();
@@ -542,15 +631,20 @@ function initListPage(){
     if(!teamKeys.length){ listEl.innerHTML = '<li>No submissions</li>'; return; }
     let html = '';
     teamKeys.forEach(team => {
-      html += `<li><strong>Team ${team}</strong></li>`;
+      html += `<details class="team-details"><summary>Team ${team}</summary><div class="team-data">`;
       const pit = teams[team].pit || [];
       const post = teams[team].post || [];
+      html += `<details class="section-details"><summary>Pit</summary><ul>`;
       pit.forEach((s,idx)=> {
-        html += `<li>&nbsp;&nbsp;Pit: ${Object.values(s).map(v=>escapeHtml(v)).join(' | ')} <button data-team="${team}" data-type="pit" data-idx="${idx}" class="del">Delete</button></li>`;
+        html += `<li>${Object.values(s).map(v=>escapeHtml(v)).join(' | ')} <button data-team="${team}" data-type="pit" data-idx="${idx}" class="del">Delete</button></li>`;
       });
+      html += `</ul></details>`;
+      html += `<details class="section-details"><summary>Match</summary><ul>`;
       post.forEach((s,idx)=> {
-        html += `<li>&nbsp;&nbsp;Post-Match: ${Object.entries(s).map(([k,v])=>`${k}: ${v}`).join(', ')} <button data-team="${team}" data-type="post" data-idx="${idx}" class="del">Delete</button></li>`;
+        html += `<li>${Object.entries(s).map(([k,v])=>`${k}: ${v}`).join(', ')} <button data-team="${team}" data-type="post" data-idx="${idx}" class="del">Delete</button></li>`;
       });
+      html += `</ul></details>`;
+      html += `</div></details>`;
     });
     listEl.innerHTML = html;
 

@@ -28,3 +28,11 @@ th, td { border: 1px solid var(--border); padding: 0.5rem; text-align: left; }
 th { background: var(--bg); color: var(--text); }
 input { width: 100%; }
 .team { padding-left: 20px; }
+details { margin: 0; }
+summary { cursor: pointer; padding: 0.5rem 0; user-select: none; }
+.team-details > summary { font-weight: bold; margin-top: 0.5rem; }
+.team-data { margin-left: 1.5rem; margin-top: 0.5rem; }
+.section-details { margin: 0.5rem 0; }
+.section-details > summary { margin-left: 1rem; font-style: italic; }
+.section-details ul { margin: 0; padding-left: 2rem; }
+.section-details li { margin: 0.3rem 0; }
